@@ -1,0 +1,11 @@
+{
+  "name": "New Tab Page",
+  "description": "Bootstrap tab and new tab",
+  "version": "1.0",
+
+ "chrome_url_overrides" : {
+    "newtab": "newtab.html"
+  },
+
+  "manifest_version": 2
+}
