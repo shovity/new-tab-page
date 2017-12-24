@@ -1,0 +1,13 @@
+{
+  "name": "new-tab-page",
+  "version": "1.0.0",
+  "description": "New tab page for chrome",
+  "main": "app.js",
+  "repository": "git@github.com:shovity/new-tab-page.git",
+  "author": "Huong Nguyen <shovity@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build"
+  }
+}

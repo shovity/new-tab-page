@@ -7,5 +7,15 @@
     "newtab": "newtab.html"
   },
 
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "permissions": [
+    "bookmarks",
+    "topSites",
+    "tabs",
+    "<all_urls>"
+  ],
   "manifest_version": 2
 }
