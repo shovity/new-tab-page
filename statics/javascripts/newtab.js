@@ -18,7 +18,7 @@ const images    = window.imageIndex.map(e => `statics/images/backgrounds/${e}`)
 const imagesMin = window.imageMinIndex.map(e => `statics/images/backgrounds/min/${e}`)
 
 // create port to connect to background scripts (when boot chrome)
-const port = chrome.runtime.connect({ name: "pip" })
+let port = chrome.runtime.connect({ name: "pip" })
 
 // delay request
 const requestDelay = 1000
@@ -296,7 +296,7 @@ port.onMessage.addListener(({ request, data, err }) => {
         port.postMessage({ request: GET_BOOkMARK })
         port.postMessage({ request: GET_NOTES })
         backgroundNotReady = false
-        // console.log('background is ready, request interval cleared')
+        console.log('background is ready, request interval cleared')
         clearInterval(requsetInterval)
         requsetInterval = null
       } else {
@@ -327,13 +327,11 @@ port.onMessage.addListener(({ request, data, err }) => {
       console.log('Revice response not match')
   }
 })
-
+console.log('load page')
 // request note to background scripts .,-+)
 port.postMessage({ request: ARE_YOU_READY })
 if (requsetInterval === null && backgroundNotReady) requsetInterval = setInterval(() => {
-  // This interval only work when start chrome
-  // because background script boot is slow
-  port.postMessage({ request: ARE_YOU_READY })
+  location.reload()
 }, requestDelay)
 
 // you make it 6099f8686c1162b61cead087bc7812a5
