@@ -15,6 +15,7 @@
     "bookmarks",
     "topSites",
     "tabs",
+    "storage",
     "<all_urls>"
   ],
   "manifest_version": 2

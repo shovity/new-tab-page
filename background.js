@@ -1,6 +1,9 @@
 // REQUEST LIST 
 const GET_BOOkMARK = 'GET_BOOkMARK'
 const GET_MOSTSITE = 'GET_MOSTSITE'
+const GET_NOTES = 'GET_NOTES'
+const POST_NOTES = 'POST_NOTES'
+const ARE_YOU_READY = 'ARE_YOU_READY'
 
 chrome.runtime.onConnect.addListener(function(port) {
 
@@ -37,6 +40,11 @@ chrome.runtime.onConnect.addListener(function(port) {
   port.onMessage.addListener(function(msg) {
     switch (msg.request) {
 
+      case ARE_YOU_READY:
+        // check background script ready
+        port.postMessage({ request: msg.request, data: true })
+        break
+
       case GET_BOOkMARK:
         // Get bookmarks recent
         chrome.bookmarks.getTree((bookmarkNodes) => {
@@ -48,6 +56,19 @@ chrome.runtime.onConnect.addListener(function(port) {
         // Get most sites visited
         chrome.topSites.get((mostVisitedUrls) => {
           port.postMessage({ request: msg.request, data: mostVisitedUrls })
+        })
+        break
+
+      case POST_NOTES:
+        // Get notes
+        chrome.storage.local.set({ 'notes': msg.data }, () => {
+        })
+        break
+
+      case GET_NOTES:
+        // Get notes
+        chrome.storage.local.get('notes', (data) => {
+          port.postMessage({ request: msg.request, data })
         })
         break
 
