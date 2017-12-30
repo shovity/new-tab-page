@@ -1,15 +1,15 @@
 // REQUEST LIST
-const GET_BOOkMARK  = 'GET_BOOkMARK'
-const GET_MOSTSITE  = 'GET_MOSTSITE'
 const GET_NOTES     = 'GET_NOTES'
 const POST_NOTES    = 'POST_NOTES'
+const GET_BOOkMARK  = 'GET_BOOkMARK'
+const GET_MOSTSITE  = 'GET_MOSTSITE'
 const ARE_YOU_READY = 'ARE_YOU_READY'
 
 
 // init config
-const wallpaperRandom = true
-const minWallpaper    = false
 const debug           = true
+const minWallpaper    = false
+const wallpaperRandom = true
 
 // init varible
 const wW        = window.document.documentElement.clientWidth
@@ -276,6 +276,25 @@ const renderNotes = (notes, clear = true) => {
     addNote(createNoteObject(''))
     // push state when add a note
     pushState()
+  })
+}
+
+{
+  
+  const addWave = (x, y) => {
+    
+    waveClickBox.innerHTML =
+    `<div class="wave active" style="transform: translate(${x}px, ${y}px)">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>`
+  }
+
+  window.addEventListener('mousedown', (event) => {
+    const x = event.clientX
+    const y = event.clientY
+    addWave(x, y)
   })
 }
 
