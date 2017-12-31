@@ -10,11 +10,12 @@ let notesCache = null
 
 const notifiBookmarkUpdated = (port, type) => {
   chrome.bookmarks.getTree((bookmarkNodes) => {
-    // console.log('notifi changed', type)
+    console.log('notifi changed', type)
     bookmarksCache = bookmarkNodes
     port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
   })
 }
+
 
 chrome.runtime.onConnect.addListener((port) => {
 
@@ -40,9 +41,9 @@ chrome.runtime.onConnect.addListener((port) => {
         // Get bookmarks recent
         if (bookmarksCache) {
           port.postMessage({ request: msg.request, data: bookmarksCache })
-          // console.log('get bookmarks cached')
+          console.log('get bookmarks cached')
         } else {
-          // console.log('get bookmarks none cache')
+          console.log('get bookmarks none cache')
           chrome.bookmarks.getTree((bookmarkNodes) => {
             bookmarksCache = bookmarkNodes
             port.postMessage({ request: msg.request, data: bookmarkNodes })
@@ -61,7 +62,7 @@ chrome.runtime.onConnect.addListener((port) => {
       case POST_NOTES:
         // write notes -> storage
         chrome.storage.local.set({ 'notes': msg.data }, () => {
-          // console.log('write notes')
+          console.log('write notes')
           notesCache.notes = msg.data
         })
         break
@@ -69,10 +70,10 @@ chrome.runtime.onConnect.addListener((port) => {
       case GET_NOTES:
         // Get notes
         if (notesCache) {
-          // console.log('get notes cached')
+          console.log('get notes cached')
           port.postMessage({ request: msg.request, data: notesCache })
         } else {
-          // console.log('get notes none cache')
+          console.log('get notes none cache')
           chrome.storage.local.get('notes', (data) => {
             notesCache = data
             port.postMessage({ request: msg.request, data })

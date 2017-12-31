@@ -18,28 +18,26 @@ body {
 #wall {
   width: 100vw;
   height: 100vh;
-  background: url(../images/backgrounds/716428.png) no-repeat;
+  /*background: #000 url(images/backgrounds/716428.png) no-repeat;*/
   background-size: cover;
   z-index: -1;
-  /*animation: fade-in 0.6s ease-in-out 0s;*/
+  /*animation: fade-in 0.2s ease-in-out 0s;*/
 }
 
 /*Bookmark Bar*/
 
 #r-snack {
-  transform: translateX(calc(100% - 1px));
   overflow-y: auto;
-  /*background: red;*/
   padding-left: 10px;
   position: fixed;
   top: 0;
-  right: 0;
+  left: calc(100% - 1px);
   height: 100vh;
   transition: transform .3s ease-in-out;
 }
 
 #r-snack:hover {
-  transform: translateX(0);
+  transform: translateX(calc(-100% + 1px));
 }
 
 #r-snack:hover + #floatAddNote {
@@ -190,13 +188,6 @@ body {
   content: "X";
 }
 
-
-
-@font-face {
- font-family: "IndieFlower";
- src: url("../fonts/IndieFlower.ttf");
-}
-
 /*click wave*/
 
 .wave {
@@ -274,4 +265,9 @@ body {
     width: 150px;
     height: 150px;
   }
+}
+
+@font-face {
+ font-family: "IndieFlower";
+ src: url("fonts/IndieFlower.ttf");
 }

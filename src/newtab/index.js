@@ -1,3 +1,4 @@
+import './style.css'
 // REQUEST LIST
 const GET_NOTES     = 'GET_NOTES'
 const POST_NOTES    = 'POST_NOTES'
@@ -15,8 +16,7 @@ const showMostSite    = true
 // init varible
 const wW        = window.document.documentElement.clientWidth
 const wH        = window.document.documentElement.clientHeight
-const images    = window.imageIndex.map(e => `statics/images/backgrounds/${e}`)
-const imagesMin = window.imageMinIndex.map(e => `statics/images/backgrounds/min/${e}`)
+const images    = window.imageIndex.map(e => `images/backgrounds/${e}`)
 
 // create port to connect to background scripts (when boot chrome)
 let port = chrome.runtime.connect({ name: "pip" })
@@ -40,13 +40,8 @@ if (!floatAddNote) document.body.innerHTML  += '<div id="floatAddNote"></div><di
 
 // random wallpaper
 if (wallpaperRandom) {
-  if (minWallpaper) {
-    const i = Math.floor(Math.random() * imagesMin.length)
-    wall.style.backgroundImage = `url(${imagesMin[i]})`
-  } else {
-    const i = Math.floor(Math.random() * images.length)
-    wall.style.backgroundImage = `url(${images[i]})`
-  }
+  const i = Math.floor(Math.random() * images.length)
+  wall.style.backgroundImage = `url(${images[i]})`
 }
 
 /**
@@ -82,7 +77,7 @@ bookmark.createParent = (node) => {
 
   result += `
   <div class="parent-header">
-    <img src="/statics/images/folder.svg">
+    <img src="images/folder.svg">
     <div class="label">${label}</div>
   </div>`
 
@@ -337,7 +332,7 @@ port.onMessage.addListener(({ request, data, err }) => {
       break
 
     case GET_NOTES:
-      notes = data.notes
+      notes = data.notes || []
       // console.log('reviced notes form backgroud: ', notes)
       renderNotes(notes)
       break
