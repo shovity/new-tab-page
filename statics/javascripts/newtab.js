@@ -10,6 +10,7 @@ const ARE_YOU_READY = 'ARE_YOU_READY'
 const debug           = true
 const minWallpaper    = false
 const wallpaperRandom = true
+const showMostSite    = true
 
 // init varible
 const wW        = window.document.documentElement.clientWidth
@@ -326,7 +327,7 @@ port.onMessage.addListener(({ request, data, err }) => {
     case GET_BOOkMARK:
       bookmark.render(data[0].children[0], true)
       // request get most site visited when recive bookmark
-      port.postMessage({ request: GET_MOSTSITE })
+      if (showMostSite) port.postMessage({ request: GET_MOSTSITE })
       break
 
     case GET_MOSTSITE:

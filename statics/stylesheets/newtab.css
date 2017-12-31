@@ -27,7 +27,7 @@ body {
 /*Bookmark Bar*/
 
 #r-snack {
-  transform: translateX(209px);
+  transform: translateX(calc(100% - 1px));
   overflow-y: auto;
   /*background: red;*/
   padding-left: 10px;
