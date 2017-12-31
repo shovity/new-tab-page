@@ -23,6 +23,26 @@ body {
   z-index: -1;
 }
 
+.icon {
+  display: inline-block;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.icon-folder {
+  background-image: url(../images/folder.png);
+  width: 25px;
+  height: 25px;
+  margin-bottom: -5px;
+}
+
+.icon-settings {
+  background-image: url(../images/settings.png);
+  width: 26px;
+  height: 26px;
+  margin-bottom: -5px;
+}
+
 /*Bookmark Bar*/
 
 #r-snack {
@@ -39,8 +59,9 @@ body {
   transform: translateX(calc(-100% + 1px));
 }
 
-#r-snack:hover + #floatAddNote {
+#r-snack:hover + #menuFloat {
   opacity: 0;
+  pointer-events: none;
 }
 
 #bookmarkBar {
@@ -90,11 +111,6 @@ body {
   padding: 10px 10px 5px 10px;
 }
 
-.parent-header > img {
-  width: 24px;
-  margin-bottom: -5px;
-}
-
 .parent-header > .label {
   display: inline-block;
 }
@@ -104,12 +120,25 @@ body {
   to { opacity: 1 }
 }
 
-/*Noter*/
+/*Menu float*/
 
-#floatAddNote {
-  background: #e91e63;
+#menuFloat {
   position: fixed;
-  right: 50px;
+  height: 50px;
+  width: 50px;
+  right: 100px;
+  bottom: 50px;
+  border-radius: 30px;
+  transition: opacity .3s ease-in-out;
+}
+
+#menuFloat:hover {
+  width: 250px;
+}
+
+#menuFloat div {
+  position: fixed;
+  right: 100px;
   bottom: 50px;
   border-radius: 50%;
   width: 50px;
@@ -119,12 +148,59 @@ body {
   text-align: center;
   transition: opacity .3s ease-in-out;
   cursor: pointer;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.26), 0 4px 18px 0 rgba(0,0,0,0.18);
+  box-shadow: 0 5px 10px 0 rgba(0,0,0,0.36), 0 5px 20px 0 rgba(0,0,0,0.28);
+  opacity: 0;
+  transition: transform .3s ease-in-out, opacity .3s ease-in-out;
 }
 
-#floatAddNote::before {
-  content: "+"
+#menuFloat .main {
+  background: #e91e63;
+  opacity: 1;
 }
+
+#btnAddNote:hover {
+  background: #b70642;
+}
+
+#btnAddNote:active {
+  background: #e91e63;
+}
+
+#btnNull {
+  background: #2196F3;
+}
+
+#btnNull:hover {
+  background: #0b6cb9;
+}
+
+#btnNull:active {
+  background: #2196F3;
+}
+
+#menuFloat:hover #btnNull {
+  opacity: 1;
+  transform: translateX(-100px);
+}
+
+#btnSettings {
+  background: #FF9800;
+}
+
+#btnSettings:hover {
+  background: #ce8212;
+}
+
+#btnSettings:active {
+  background: #FF9800;
+}
+
+#menuFloat:hover #btnSettings {
+  opacity: 1;
+  transform: translateX(-200px);
+}
+
+/*Noter*/
 
 #noteBox .note {
   color: #000;
@@ -148,11 +224,24 @@ body {
 #noteBox textarea {
   font-family: IndieFlower, roboto, arial;
   padding: 10px;
-  width: 300px;
-  height: 100px;
+  min-width: 300px;
+  min-height: 80px;
   background: none;
   border: none;
   margin-bottom: -3px;
+}
+
+
+#noteBox textarea::-webkit-scrollbar {
+  width: 10px;
+}
+ 
+#noteBox textarea::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+ 
+#noteBox textarea::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .note .note-controls {
@@ -173,10 +262,10 @@ body {
   position: absolute;
   top: 2px;
   right: 5px;
-  background: #F44336;
-  width: 16px;
+  background: rgba(0, 0, 0, 0.25);
+  width: 25px;
   height: 16px;
-  border-radius: 50%;
+  border-radius: 7px;
   text-align: center;
   line-height: 12px;
 }
@@ -185,6 +274,46 @@ body {
   color: #fff;
   font-family: IndieFlower;
   content: "X";
+}
+
+.rain-bow {
+  position: absolute;
+  width: 5px;
+  height: 50%;
+  min-height: 90px;
+  left: -7px;
+  top: 10px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.rain-bow div {
+  margin: 1px 0;
+  height: 33.33%;
+  width: 7px;
+}
+
+.note-controls:active + .rain-bow > div {
+  transform:  translate(-15px, -15px) rotate(-180deg)
+}
+
+.rain-bow > div:nth-child(1) {
+  background: #007bff;
+  transition: all .1s ease-in-out;
+}
+
+.rain-bow > div:nth-child(2) {
+  background: #28a745;
+  transition: all .2s ease-in-out;
+}
+
+.rain-bow > div:nth-child(3) {
+  background: #dc3545;
+  transition: all .3s ease-in-out;
+}
+
+@keyframes {
+
 }
 
 /*click wave*/
@@ -199,7 +328,7 @@ body {
   position: fixed;
   right: 0;
   top: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   transform: translate(50%, -50%);
 }
@@ -228,7 +357,7 @@ body {
   position: fixed;
   right: 0;
   top: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   transform: translate(50%, -50%);
 }

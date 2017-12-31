@@ -16,6 +16,11 @@ const wW        = window.document.documentElement.clientWidth
 const wH        = window.document.documentElement.clientHeight
 const images    = window.imageIndex.map(e => `images/backgrounds/${e}`)
 
+const codeTables = [
+  { code: 'date', value: new Date().toLocaleDateString() },
+  { code: 'time', value: new Date().toLocaleTimeString() },
+]
+
 // create port to connect to background scripts (when boot chrome)
 let port = chrome.runtime.connect({ name: "pip" })
 
@@ -30,11 +35,6 @@ let backgroundNotReady = true
 let notes = []
 
 if (!debug) console.log = () => 'debug disabled'
-
-// validate html element
-if (!wall) document.body.innerHTML          += '<div id="wall"></div>'
-if (!bookmarkBar) window.body.innerHTML     += '<div id="r-snack"><div id="bookmarkBar"></div></div>'
-if (!floatAddNote) document.body.innerHTML  += '<div id="floatAddNote"></div><div id="noteBox"></div>'
 
 // random wallpaper
 if (wallpaperRandom) {
@@ -75,7 +75,7 @@ bookmark.createParent = (node) => {
 
   result += `
   <div class="parent-header">
-    <img src="images/folder.svg">
+    <span class="icon icon-folder"></span>
     <div class="label">${label}</div>
   </div>`
 
@@ -119,6 +119,7 @@ const createNoteHtmlElement = (id, msg, x, y, w, h) => {
         <div class="note-controls" move-noteid="${id}">
           <div class="note-remove" remove-noteid="${id}"></div>
         </div>
+        <div class="rain-bow"><div></div><div></div><div></div></div>
         <textarea placeholder="new note" editor-noteid="${id}" style="width:${w}px; height:${h-20}px; ">${msg}</textarea>
       </div>
     </div>
@@ -145,6 +146,17 @@ const renderNotes = (notes, clear = true) => {
   notes.forEach(note => {
     addNote(note)
   })
+}
+
+const checkAndReplaceCode = (target) => {
+  const string = target.value
+  const startIndexCode = string.lastIndexOf('[')
+
+  if (startIndexCode !== -1) {
+    const code = string.slice(startIndexCode + 1, -1)
+    const object = codeTables.find(e => e.code === code)
+    if (object) target.value =  string.replace(`[${code}]`, object.value)
+  } 
 }
 
 {
@@ -185,7 +197,7 @@ const renderNotes = (notes, clear = true) => {
       // detect mouse down over resize btn
       if (note.x + note.w - cx < 15 && note.y + note.h - cy < 15) {
         resizeId = noteId
-        console.log('start resize, resizeId ', resizeId)
+        // console.log('start resize, resizeId ', resizeId)
       }
     }
 
@@ -259,6 +271,9 @@ const renderNotes = (notes, clear = true) => {
       const noteId = +target.getAttribute('editor-noteid')
       const noteIndex = notes.findIndex((note) => note.id == noteId)
 
+      // handle note code
+      if (event.key === ']') checkAndReplaceCode(target)
+
       notes[noteIndex].msg = target.value
       // push state when done press a key if fucus textarea
       pushState()
@@ -266,7 +281,7 @@ const renderNotes = (notes, clear = true) => {
   })
 
   // listen add note
-  window.floatAddNote.addEventListener('click', () => {
+  window.btnAddNote.addEventListener('click', () => {
     addNote(createNoteObject(''))
     // push state when add a note
     pushState()
@@ -340,7 +355,6 @@ port.onMessage.addListener(({ request, data, err }) => {
       console.log('Revice response not match')
   }
 })
-console.log('load page')
 // request note to background scripts .,-+)
 port.postMessage({ request: ARE_YOU_READY })
 if (requsetInterval === null && backgroundNotReady) requsetInterval = setInterval(() => {
