@@ -1,40 +1,31 @@
 // REQUEST LIST 
-const GET_BOOkMARK = 'GET_BOOkMARK'
-const GET_MOSTSITE = 'GET_MOSTSITE'
-const GET_NOTES = 'GET_NOTES'
-const POST_NOTES = 'POST_NOTES'
+const GET_NOTES     = 'GET_NOTES'
+const POST_NOTES    = 'POST_NOTES'
+const GET_BOOkMARK  = 'GET_BOOkMARK'
+const GET_MOSTSITE  = 'GET_MOSTSITE'
 const ARE_YOU_READY = 'ARE_YOU_READY'
 
-chrome.runtime.onConnect.addListener(function(port) {
+let bookmarksCache = null
+let notesCache = null
+
+const notifiBookmarkUpdated = (port, type) => {
+  chrome.bookmarks.getTree((bookmarkNodes) => {
+    // console.log('notifi changed', type)
+    bookmarksCache = bookmarkNodes
+    port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
+  })
+}
+
+chrome.runtime.onConnect.addListener((port) => {
 
   // Only service port name "pip"
   if (port.name !== 'pip') return
 
-
   // listen update bookmark
-  chrome.bookmarks.onCreated.addListener(() => {
-    chrome.bookmarks.getTree((bookmarkNodes) => {
-      port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
-    })
-  })
-
-  chrome.bookmarks.onRemoved.addListener(() => {
-    chrome.bookmarks.getTree((bookmarkNodes) => {
-      port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
-    })
-  })
-
-  chrome.bookmarks.onChanged.addListener(() => {
-    chrome.bookmarks.getTree((bookmarkNodes) => {
-      port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
-    })
-  })
-
-  chrome.bookmarks.onMoved.addListener(() => {
-    chrome.bookmarks.getTree((bookmarkNodes) => {
-      port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
-    })
-  })
+  chrome.bookmarks.onCreated.addListener(()           => notifiBookmarkUpdated(port, 'created'))
+  chrome.bookmarks.onRemoved.addListener(()           => notifiBookmarkUpdated(port, 'removed'))
+  chrome.bookmarks.onChanged.addListener(()           => notifiBookmarkUpdated(port, 'changed'))
+  chrome.bookmarks.onMoved.addListener(()             => notifiBookmarkUpdated(port, 'moved'))
 
   // listen mesg from newtab page
   port.onMessage.addListener(function(msg) {
@@ -47,9 +38,17 @@ chrome.runtime.onConnect.addListener(function(port) {
 
       case GET_BOOkMARK:
         // Get bookmarks recent
-        chrome.bookmarks.getTree((bookmarkNodes) => {
-          port.postMessage({ request: msg.request, data: bookmarkNodes })
-        })
+        if (bookmarksCache) {
+          port.postMessage({ request: msg.request, data: bookmarksCache })
+          // console.log('get bookmarks cached')
+        } else {
+          // console.log('get bookmarks none cache')
+          chrome.bookmarks.getTree((bookmarkNodes) => {
+            bookmarksCache = bookmarkNodes
+            port.postMessage({ request: msg.request, data: bookmarkNodes })
+          })
+        }
+
         break
 
       case GET_MOSTSITE:
@@ -60,16 +59,26 @@ chrome.runtime.onConnect.addListener(function(port) {
         break
 
       case POST_NOTES:
-        // Get notes
+        // write notes -> storage
         chrome.storage.local.set({ 'notes': msg.data }, () => {
+          // console.log('write notes')
+          notesCache.notes = msg.data
         })
         break
 
       case GET_NOTES:
         // Get notes
-        chrome.storage.local.get('notes', (data) => {
-          port.postMessage({ request: msg.request, data })
-        })
+        if (notesCache) {
+          // console.log('get notes cached')
+          port.postMessage({ request: msg.request, data: notesCache })
+        } else {
+          // console.log('get notes none cache')
+          chrome.storage.local.get('notes', (data) => {
+            notesCache = data
+            port.postMessage({ request: msg.request, data })
+          })
+        }
+          
         break
 
       default:
@@ -77,10 +86,3 @@ chrome.runtime.onConnect.addListener(function(port) {
     }
   })
 })
-
-// chrome.tabs.captureVisibleTab((data) => {
-//   console.log(data)
-// })
-// chrome.tabs.getAllInWindow((tabs) => {
-//   console.log(tabs)
-// })
