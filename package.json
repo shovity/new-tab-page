@@ -8,13 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "./bin/gen-image-index",
-    "dev": "webpack --watch"
-  },
-  "dependencies": {
-    "css-loader": "^0.28.7",
-    "style-loader": "^0.19.1",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.10.0"
+    "build": "./bin/gen-image-index"
   }
 }
+

@@ -1,11 +1,9 @@
-import './style.css'
 // REQUEST LIST
 const GET_NOTES     = 'GET_NOTES'
 const POST_NOTES    = 'POST_NOTES'
 const GET_BOOkMARK  = 'GET_BOOkMARK'
 const GET_MOSTSITE  = 'GET_MOSTSITE'
 const ARE_YOU_READY = 'ARE_YOU_READY'
-
 
 // init config
 const debug           = true

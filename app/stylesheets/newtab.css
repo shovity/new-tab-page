@@ -18,10 +18,9 @@ body {
 #wall {
   width: 100vw;
   height: 100vh;
-  /*background: #000 url(images/backgrounds/716428.png) no-repeat;*/
+  background: url(../images/backgrounds/673189.png) no-repeat;
   background-size: cover;
   z-index: -1;
-  /*animation: fade-in 0.2s ease-in-out 0s;*/
 }
 
 /*Bookmark Bar*/
@@ -269,5 +268,5 @@ body {
 
 @font-face {
  font-family: "IndieFlower";
- src: url("fonts/IndieFlower.ttf");
+ src: url("../fonts/IndieFlower.ttf");
 }

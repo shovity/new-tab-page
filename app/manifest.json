@@ -8,7 +8,7 @@
   },
 
   "background": {
-    "scripts": ["background.bundle.js"]
+    "scripts": [ "background.js" ]
   },
 
   "permissions": [
