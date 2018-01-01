@@ -1,7 +1,7 @@
 // REQUEST LIST 
 const GET_NOTES     = 'GET_NOTES'
 const POST_NOTES    = 'POST_NOTES'
-const GET_BOOkMARK  = 'GET_BOOkMARK'
+const GET_BOOKMARK  = 'GET_BOOKMARK'
 const GET_MOSTSITE  = 'GET_MOSTSITE'
 const ARE_YOU_READY = 'ARE_YOU_READY'
 
@@ -11,7 +11,7 @@ let notesCache = null
 const notifiBookmarkUpdated = (port, type) => {
   chrome.bookmarks.getTree((bookmarkNodes) => {
     bookmarksCache = bookmarkNodes
-    port.postMessage({ request: GET_BOOkMARK, data: bookmarkNodes })
+    port.postMessage({ request: GET_BOOKMARK, data: bookmarkNodes })
   })
 }
 
@@ -21,10 +21,10 @@ chrome.runtime.onConnect.addListener((port) => {
   if (port.name !== 'pip') return
 
   // listen update bookmark
-  chrome.bookmarks.onCreated.addListener(()           => notifiBookmarkUpdated(port, 'created'))
-  chrome.bookmarks.onRemoved.addListener(()           => notifiBookmarkUpdated(port, 'removed'))
-  chrome.bookmarks.onChanged.addListener(()           => notifiBookmarkUpdated(port, 'changed'))
-  chrome.bookmarks.onMoved.addListener(()             => notifiBookmarkUpdated(port, 'moved'))
+  chrome.bookmarks.onCreated.addListener(() => notifiBookmarkUpdated(port, 'created'))
+  chrome.bookmarks.onRemoved.addListener(() => notifiBookmarkUpdated(port, 'removed'))
+  chrome.bookmarks.onChanged.addListener(() => notifiBookmarkUpdated(port, 'changed'))
+  chrome.bookmarks.onMoved.addListener(()   => notifiBookmarkUpdated(port, 'moved'))
 
   // listen mesg from newtab page
   port.onMessage.addListener(function(msg) {
@@ -35,7 +35,7 @@ chrome.runtime.onConnect.addListener((port) => {
         port.postMessage({ request: msg.request, data: true })
         break
 
-      case GET_BOOkMARK:
+      case GET_BOOKMARK:
         // Get bookmarks recent
         if (bookmarksCache) {
           port.postMessage({ request: msg.request, data: bookmarksCache })
@@ -45,7 +45,6 @@ chrome.runtime.onConnect.addListener((port) => {
             port.postMessage({ request: msg.request, data: bookmarkNodes })
           })
         }
-
         break
 
       case GET_MOSTSITE:
@@ -72,7 +71,6 @@ chrome.runtime.onConnect.addListener((port) => {
             port.postMessage({ request: msg.request, data })
           })
         }
-          
         break
 
       default:

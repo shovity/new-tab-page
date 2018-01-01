@@ -1,7 +1,7 @@
 // REQUEST LIST
 const GET_NOTES     = 'GET_NOTES'
 const POST_NOTES    = 'POST_NOTES'
-const GET_BOOkMARK  = 'GET_BOOkMARK'
+const GET_BOOKMARK  = 'GET_BOOKMARK'
 const GET_MOSTSITE  = 'GET_MOSTSITE'
 const ARE_YOU_READY = 'ARE_YOU_READY'
 
@@ -12,9 +12,9 @@ const wallpaperRandom = true
 const showMostSite    = true
 
 // init varible
-const wW        = window.document.documentElement.clientWidth
-const wH        = window.document.documentElement.clientHeight
-const images    = window.imageIndex.map(e => `images/backgrounds/${e}`)
+const wW     = window.document.documentElement.clientWidth
+const wH     = window.document.documentElement.clientHeight
+const images = window.imageIndex.map(e => `images/backgrounds/${e}`)
 
 const codeTables = [
   { code: 'date', value: new Date().toLocaleDateString() },
@@ -321,7 +321,7 @@ port.onMessage.addListener(({ request, data, err }) => {
 
     case ARE_YOU_READY:
       if (data) {
-        port.postMessage({ request: GET_BOOkMARK })
+        port.postMessage({ request: GET_BOOKMARK })
         port.postMessage({ request: GET_NOTES })
         backgroundNotReady = false
         console.log('background is ready, request interval cleared')
@@ -332,7 +332,7 @@ port.onMessage.addListener(({ request, data, err }) => {
       }
       break
 
-    case GET_BOOkMARK:
+    case GET_BOOKMARK:
       bookmark.render(data[0].children[0], true)
       // request get most site visited when recive bookmark
       if (showMostSite) port.postMessage({ request: GET_MOSTSITE })
@@ -360,5 +360,3 @@ port.postMessage({ request: ARE_YOU_READY })
 if (requsetInterval === null && backgroundNotReady) requsetInterval = setInterval(() => {
   location.reload()
 }, requestDelay)
-
-// you make it 6099f8686c1162b61cead087bc7812a5
