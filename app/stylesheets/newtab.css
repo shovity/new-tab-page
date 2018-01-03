@@ -75,11 +75,11 @@ body {
   background: rgba(0, 0, 0, 0.6);
   width: 5px;
 }
- 
+
 #r-snack::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.2);
 }
- 
+
 #r-snack::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.6);
 }
@@ -235,11 +235,11 @@ body {
 #noteBox textarea::-webkit-scrollbar {
   width: 10px;
 }
- 
+
 #noteBox textarea::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.1);
 }
- 
+
 #noteBox textarea::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.3);
 }
@@ -318,6 +318,10 @@ body {
 
 /*click wave*/
 
+#waveClickBox {
+  pointer-events: none;
+}
+
 .wave {
   position: fixed;
   top: 0;
@@ -382,10 +386,47 @@ body {
   animation: wave 1s linear 1s;
 }
 
+/* context menu */
+
+#contextMenu div {
+  background: #fff;
+  width: 200px;
+  height: 200px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.26), 0 4px 18px 0 rgba(0,0,0,0.18);
+  color: #222;
+  animation: menu-open .3s ease-in-out 0s;
+  overflow: hidden;
+}
+
+
+@keyframes menu-open {
+  from {
+    height: 0;
+  }
+  to {
+    height: 200px;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
 @keyframes wave {
   from {
     opacity: 1;
-    width: 0; 
+    width: 0;
     height: 0;
   }
   to {

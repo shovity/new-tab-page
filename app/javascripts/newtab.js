@@ -47,7 +47,8 @@ if (wallpaperRandom) {
  */
 
 const bookmark = {
-  htmlElement: window.bookmarkBar
+  htmlBookmarkBar: window.bookmarkBar,
+  htmlMenu: window.bookmarkContextMenu
 }
 
 bookmark.createItem = (node) => {
@@ -70,7 +71,7 @@ bookmark.createItem = (node) => {
 bookmark.createParent = (node) => {
   const label = node.title
   const nodes = node.children
-  
+
   let result = '<div class="parent">'
 
   result += `
@@ -87,8 +88,8 @@ bookmark.createParent = (node) => {
 }
 
 bookmark.render = (node, clear = false) => {
-  if (clear) bookmark.htmlElement.innerHTML = ''
-  bookmark.htmlElement.innerHTML += bookmark.createParent(node)
+  if (clear) bookmark.htmlBookmarkBar.innerHTML = ''
+  bookmark.htmlBookmarkBar.innerHTML += bookmark.createParent(node)
   return ''
 }
 
@@ -156,7 +157,7 @@ const checkAndReplaceCode = (target) => {
     const code = string.slice(startIndexCode + 1, -1)
     const object = codeTables.find(e => e.code === code)
     if (object) target.value =  string.replace(`[${code}]`, object.value)
-  } 
+  }
 }
 
 {
@@ -193,7 +194,7 @@ const checkAndReplaceCode = (target) => {
       const noteId = +target.getAttribute('editor-noteid')
       const noteIndex = notes.findIndex((note) => note.id == noteId)
       const note = notes[noteIndex]
-      
+
       // detect mouse down over resize btn
       if (note.x + note.w - cx < 15 && note.y + note.h - cy < 15) {
         resizeId = noteId
@@ -260,7 +261,7 @@ const checkAndReplaceCode = (target) => {
       pushState()
     }
 
-    
+
   })
 
   // Handle edit notes
@@ -289,9 +290,9 @@ const checkAndReplaceCode = (target) => {
 }
 
 {
-  
+
   const addWave = (x, y) => {
-    
+
     waveClickBox.innerHTML =
     `<div class="wave active" style="transform: translate(${x}px, ${y}px)">
       <div></div>
@@ -306,6 +307,54 @@ const checkAndReplaceCode = (target) => {
     addWave(x, y)
   })
 }
+
+// context menu
+const contextMenu = {
+  htmlMenu: window.contextMenu,
+  isOpen: false
+}
+
+contextMenu.open = (x, y, h) => {
+  const px = (x > wW - 200)? wW - 200 : x
+  const py = (y > wH - 180)? wH - 180 : y+20
+
+  contextMenu.isOpen = true
+
+  contextMenu.htmlMenu.innerHTML =
+  `<div style='transform: translate(${px}px, ${py}px)'>
+    <div class="cm-i" cmd="kill them">click</div>
+  </div>`
+}
+
+contextMenu.close = () => {
+  contextMenu.isOpen = false
+  contextMenu.htmlMenu.innerHTML = ''
+}
+
+// handle open menu
+window.addEventListener('contextmenu', (event) => {
+  if (contextMenu.isOpen) {
+    contextMenu.close()
+  } else {
+    contextMenu.open(event.clientX, event.clientY)
+  }
+  event.preventDefault()
+})
+
+// handle close and actions menu
+window.addEventListener('click', (event) => {
+  // pass when menu is closed
+  if (!contextMenu.isOpen) return
+
+  const { target } = event
+  if (target.className !== 'cm-i') {
+    contextMenu.close()
+    event.preventDefault()
+  } else {
+    console.log('hang ve: ' + target.getAttribute("cmd"))
+  }
+})
+
 
 
 /**
