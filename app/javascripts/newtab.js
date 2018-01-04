@@ -121,7 +121,10 @@ const createNoteHtmlElement = (id, msg, x, y, w, h) => {
           <div class="note-remove" remove-noteid="${id}"></div>
         </div>
         <div class="rain-bow"><div></div><div></div><div></div></div>
-        <textarea placeholder="new note" editor-noteid="${id}" style="width:${w}px; height:${h-20}px; ">${msg}</textarea>
+        <textarea
+          placeholder="new note"
+          editor-noteid="${id}"
+          style="width:${w}px;height:${h-20}px;">${msg}</textarea>
       </div>
     </div>
   `
@@ -352,6 +355,7 @@ window.addEventListener('click', (event) => {
     event.preventDefault()
   } else {
     console.log('hang ve: ' + target.getAttribute("cmd"))
+    contextMenu.close()
   }
 })
 
