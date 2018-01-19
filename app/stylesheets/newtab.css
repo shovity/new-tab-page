@@ -92,6 +92,7 @@ body {
   color: inherit;
   text-decoration: none;
   transition: transform .2s ease-out;
+  white-space: nowrap;
 }
 
 #bookmarkBar .item:hover {
@@ -222,7 +223,7 @@ body {
 }
 
 #noteBox textarea {
-  font-family: IndieFlower, roboto, arial;
+  font-family: roboto, arial;
   padding: 10px;
   min-width: 300px;
   min-height: 80px;
