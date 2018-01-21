@@ -436,8 +436,3 @@ body {
     height: 150px;
   }
 }
-
-@font-face {
- font-family: "IndieFlower";
- src: url("../fonts/IndieFlower.ttf");
-}

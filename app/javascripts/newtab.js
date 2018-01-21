@@ -279,7 +279,8 @@ const checkAndReplaceCode = (target) => {
       if (event.key === ']') checkAndReplaceCode(target)
 
       notes[noteIndex].msg = target.value
-      // push state when done press a key if fucus textarea
+      console.log('edit and save')
+      // push state when done press a key if focus textarea
       pushState()
     }
   })
