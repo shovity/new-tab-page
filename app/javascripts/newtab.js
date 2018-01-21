@@ -32,7 +32,7 @@ let requsetInterval = null
 let backgroundNotReady = true
 
 // note state
-let notes = []
+window.notes = []
 
 if (!debug) console.log = () => 'debug disabled'
 
@@ -138,6 +138,8 @@ const addNote = (note) => {
   if (id === undefined) {
     id = notes.push({ id: notes.length, msg, x, y, w, h }) - 1
   }
+
+  console.log(`add note ${id} = ${msg}`)
 
   // render html
   noteBox.innerHTML += createNoteHtmlElement(id, msg, x, y, w, h)
@@ -290,6 +292,7 @@ const checkAndReplaceCode = (target) => {
     addNote(createNoteObject(''))
     // push state when add a note
     pushState()
+    renderNotes(notes)
   })
 }
 
@@ -414,3 +417,5 @@ port.postMessage({ request: ARE_YOU_READY })
 if (requsetInterval === null && backgroundNotReady) requsetInterval = setInterval(() => {
   location.reload()
 }, requestDelay)
+
+window.l = notes
