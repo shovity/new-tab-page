@@ -53,6 +53,7 @@ body {
   left: calc(100% - 1px);
   height: 100vh;
   transition: transform .3s ease-in-out;
+  z-index: 11;
 }
 
 #r-snack:hover {
@@ -131,7 +132,7 @@ body {
   bottom: 50px;
   border-radius: 30px;
   transition: opacity .3s ease-in-out;
-  z-index: 11;
+  z-index: 12;
 }
 
 #menuFloat:hover {
@@ -397,7 +398,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 11;
+  z-index: 13;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.26), 0 4px 18px 0 rgba(0,0,0,0.18);
   color: #222;

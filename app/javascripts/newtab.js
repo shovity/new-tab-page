@@ -340,6 +340,7 @@ contextMenu.close = () => {
 
 // handle open menu
 window.addEventListener('contextmenu', (event) => {
+  return // Building...
   if (contextMenu.isOpen) {
     contextMenu.close()
   } else {
