@@ -104,7 +104,7 @@ body {
 #bookmarkBar .title {
   display: inline-block;
   overflow: hidden;
-  max-width: 140px;
+  max-width: calc(100% - 5px);
   height: 19px;
   padding: 0 3px;
 }

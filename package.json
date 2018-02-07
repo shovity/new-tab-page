@@ -8,7 +8,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "./bin/gen-image-index"
+    "build": "./bin/gen-image-index",
+    "uglify": "uglifyjs app/javascripts/newtab.js -o app/javascripts/newtab.min.js; uglifycss app/stylesheets/newtab.css > app/stylesheets/newtab.min.css"
+  },
+  "dependencies": {
+    "uglify-es": "^3.3.9",
+    "uglifycss": "^0.0.27"
   }
 }
-
