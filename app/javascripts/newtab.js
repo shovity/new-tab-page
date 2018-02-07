@@ -139,7 +139,7 @@ const addNote = (note) => {
     id = notes.push({ id: notes.length, msg, x, y, w, h }) - 1
   }
 
-  console.log(`add note ${id} = ${msg}`)
+  // console.log(`add note ${id} = ${msg}`)
 
   // render html
   noteBox.innerHTML += createNoteHtmlElement(id, msg, x, y, w, h)
@@ -359,12 +359,10 @@ window.addEventListener('click', (event) => {
     contextMenu.close()
     event.preventDefault()
   } else {
-    console.log('hang ve: ' + target.getAttribute("cmd"))
+    // console.log('hang ve: ' + target.getAttribute("cmd"))
     contextMenu.close()
   }
 })
-
-
 
 /**
  * Long connect "pip"
@@ -375,14 +373,15 @@ port.onMessage.addListener(({ request, data, err }) => {
 
   if (err) return console.log(err)
 
-  switch (request) {
+  // console.log({ request })
 
+  switch (request) {
     case ARE_YOU_READY:
       if (data) {
-        port.postMessage({ request: GET_BOOKMARK })
+        port.postMessage({ request: GET_MOSTSITE })
         port.postMessage({ request: GET_NOTES })
         backgroundNotReady = false
-        console.log('background is ready, request interval cleared')
+        // console.log('background is ready, request interval cleared')
         clearInterval(requsetInterval)
         requsetInterval = null
       } else {
@@ -391,20 +390,18 @@ port.onMessage.addListener(({ request, data, err }) => {
       break
 
     case GET_BOOKMARK:
-      bookmark.render(data[0].children[0], true)
-      // request get most site visited when recive bookmark
-      if (showMostSite) port.postMessage({ request: GET_MOSTSITE })
+      bookmark.render(data[0].children[0])
       break
 
     case GET_MOSTSITE:
-      setTimeout(() => {
-        bookmark.render({ children: data, title: 'Most visited' })
-      })
+      bookmark.render({ children: data, title: 'Most visited' }, true)
+      // request get bookmark when received most site visited
+      port.postMessage({ request: GET_BOOKMARK })
       break
 
     case GET_NOTES:
       notes = data.notes || []
-      // console.log('reviced notes form backgroud: ', notes)
+      // console.log('received notes form backgroud: ', notes)
       renderNotes(notes)
       break
 
@@ -413,10 +410,9 @@ port.onMessage.addListener(({ request, data, err }) => {
       console.log('Revice response not match')
   }
 })
+
 // request note to background scripts .,-+)
 port.postMessage({ request: ARE_YOU_READY })
 if (requsetInterval === null && backgroundNotReady) requsetInterval = setInterval(() => {
   location.reload()
 }, requestDelay)
-
-window.l = notes

@@ -270,7 +270,7 @@ body {
   height: 16px;
   border-radius: 7px;
   text-align: center;
-  line-height: 12px;
+  line-height: 14px;
 }
 
 #noteBox .note-remove::before {
