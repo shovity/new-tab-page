@@ -17,14 +17,14 @@ const wH     = window.document.documentElement.clientHeight
 const images = window.imageIndex.map(e => `images/backgrounds/${e}`)
 
 const codeTables = [
-  { code: 'date', value: new Date().toLocaleDateString() },
-  { code: 'time', value: new Date().toLocaleTimeString() },
+  { code: /\[date\]/, value: new Date().toLocaleDateString() },
+  { code: /\[time\]/, value: new Date().toLocaleTimeString() },
 ]
 
 // create port to connect to background scripts (when boot chrome)
 let port = chrome.runtime.connect({ name: "pip" })
 
-// delay request
+// delay pooling request on boot system
 const requestDelay = 1000
 
 // define interval request
@@ -40,6 +40,21 @@ if (!debug) console.log = () => 'debug disabled'
 if (wallpaperRandom) {
   const i = Math.floor(Math.random() * images.length)
   wall.style.backgroundImage = `url(${images[i]})`
+}
+
+/**
+ * Config
+ */
+
+const config = {}
+
+config.set = (name, value) => {
+  if (typeof name !== 'string' || typeof value !== 'string') return console.error('config key and value must ne string')
+  window.localStorage.setItem(name, value)
+}
+
+config.get = (name) => {
+  return window.localStorage.getItem(name)
 }
 
 /**
@@ -79,10 +94,12 @@ bookmark.createParent = (node) => {
   const label = node.title
   const nodes = node.children
   const childs = nodes.map(node => bookmark.createItem(node)).join('')
+  const parentId = `${label}-${node.parentId || 'root'}`
+  const status = config.get(`bookmark:parent:${parentId}`) || 'open'
 
   return `
-  <div class="parent">
-    <div class="parent-header">
+  <div class="parent ${status}">
+    <div class="parent-header" data-parent-id="${parentId}">
       <span class="icon icon-folder"></span>
       <div class="label">${label}</div>
     </div>
@@ -101,6 +118,33 @@ bookmark.createParent = (node) => {
 bookmark.render = (node, clear = false) => {
   if (clear) bookmark.htmlBookmarkBar.innerHTML = ''
   bookmark.htmlBookmarkBar.innerHTML += bookmark.createParent(node)
+}
+
+/**
+ * ToggleOpenParent
+ * @param  {string} parentId
+ */
+bookmark.toggleOpenParent = (parentId) => {
+  // set config
+  const key = `bookmark:parent:${parentId}`
+  const open = config.get(key) === 'close'? 'open' : 'close'
+  config.set(key, open)
+
+  // change style bookmark parent
+  document.querySelector(`[data-parent-id="${parentId}"]`).parentNode.className = `parent ${open}`
+}
+
+{
+  /**
+   * BOOKMARK BAR BEHAVIOR
+   */
+  bookmark.htmlBookmarkBar.addEventListener('click', event => {
+    const { target } = event
+
+    // detect toggle parent
+    const parentId = target.getAttribute('data-parent-id') || target.parentNode.getAttribute('data-parent-id')
+    if (parentId) bookmark.toggleOpenParent(parentId)
+  })
 }
 
 /**
@@ -166,13 +210,14 @@ const renderNotes = (notes, clear = true) => {
 
 const checkAndReplaceCode = (target) => {
   const string = target.value
-  const startIndexCode = string.lastIndexOf('[')
 
-  if (startIndexCode !== -1) {
-    const code = string.slice(startIndexCode + 1, -1)
-    const object = codeTables.find(e => e.code === code)
-    if (object) target.value =  string.replace(`[${code}]`, object.value)
-  }
+  codeTables.forEach(code => {
+    const result = string.match(code.code)
+    if (result) {
+      const data = result[1]
+      target.value = string.replace(code.code, code.value.replace('$', data))
+    }
+  })
 }
 
 {
@@ -291,7 +336,6 @@ const checkAndReplaceCode = (target) => {
       if (event.key === ']') checkAndReplaceCode(target)
 
       notes[noteIndex].msg = target.value
-      console.log('edit and save')
       // push state when done press a key if focus textarea
       pushState()
     }
