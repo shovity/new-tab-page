@@ -103,6 +103,7 @@ bookmark.createParent = (node) => {
       <span class="icon icon-folder"></span>
       <div class="label">${label}</div>
     </div>
+    <div class="stopgrap"></div>
 
     <div class="parent-childs">
       ${childs}

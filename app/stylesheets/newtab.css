@@ -97,7 +97,7 @@ body {
   white-space: nowrap;
 }
 
-#bookmarkBar .item:hover {
+#bookmarkBar .item:hover, .parent-header:hover {
   background: rgba(0, 0, 0, 0.5);
   transform: translateX(-10px);
 }
@@ -111,12 +111,9 @@ body {
 }
 
 .parent-header {
+  transition: transform .2s ease-out;
   padding: 0 10px 5px 10px;
   cursor: pointer;
-}
-
-.parent-header:hover {
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .parent-header > .label {
@@ -125,6 +122,18 @@ body {
 
 .parent.close .parent-childs {
   display: none;
+}
+
+.parent.close .stopgrap {
+  display: block;
+}
+
+.parent .stopgrap {
+  display: none;
+  margin-left: 20px;
+  width: 3px;
+  height: 12px;
+  background: rgba(233, 30, 99, 0.5);
 }
 
 @keyframes fade-in {
