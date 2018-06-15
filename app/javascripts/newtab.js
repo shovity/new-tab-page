@@ -32,7 +32,7 @@ let requsetInterval = null
 let backgroundNotReady = true
 
 // note state
-let notes = []
+window.notes = []
 
 if (!debug) console.log = () => 'debug disabled'
 
@@ -157,6 +157,15 @@ const pushState = () => {
   port.postMessage({ request: POST_NOTES, data: notes })
 }
 
+const genUniqueNoteId = () => {
+  let id = 0
+  while (notes.find(note => note.id === id)) {
+    id++
+  }
+
+  return id
+}
+
 const createNoteObject = (msg, x, y, w = 300, h = 100) => {
   // random position
   if (!x || !y) {
@@ -191,7 +200,8 @@ const addNote = (note) => {
   // New note don't have a id
   // push it to state
   if (id === undefined) {
-    id = notes.push({ id: notes.length, msg, x, y, w, h }) - 1
+    const id = genUniqueNoteId()
+    notes.push({ id, msg, x, y, w, h })
   }
 
   // console.log(`add note ${id} = ${msg}`)
@@ -464,6 +474,35 @@ port.onMessage.addListener(({ request, data, err }) => {
       console.log('Revice response not match')
   }
 })
+
+/**
+ * Scoket connect port 1404
+ * For good performance, init connect affter 300ms
+ */
+
+setTimeout(() => {
+
+  // disable log stream
+  return
+
+  const socket = io('http://127.0.0.1:1404')
+
+  socket.on('connect', () => {
+      console.log('client has connected to server 1404');
+  })
+
+  socket.on('log', (log) => {
+      lines = log.split('\n')
+      let feed = ''
+
+      lines.forEach(line => {
+          if (line.trim() === '') return
+          feed += `<li><strong>${new Date().toLocaleTimeString()}: </strong>${line}</li>`
+      })
+      logBar.innerHTML += feed
+      window['b-scrollable'].scroll({ top: window['b-scrollable'].scrollHeight, left: 0, behavior: 'smooth' })
+  })
+}, 300)
 
 // request note to background scripts .,-+)
 port.postMessage({ request: ARE_YOU_READY })

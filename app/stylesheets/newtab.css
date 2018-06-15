@@ -152,6 +152,7 @@ body {
   border-radius: 30px;
   transition: opacity .3s ease-in-out;
   z-index: 12;
+  user-select: none;
 }
 
 #menuFloat:hover {
@@ -456,4 +457,75 @@ body {
     width: 150px;
     height: 150px;
   }
+}
+
+/*Log Bar*/
+
+#b-snack {
+  overflow: hidden;
+  /* padding-left: 10px; */
+  position: fixed;
+  left: 0;
+  top: calc(100% - 1px);
+  width: 100vw;
+  height: 50vh;
+  transition: transform .3s ease-in-out;
+  z-index: 11;
+}
+
+
+#b-snack #b-scrollable {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-top: 1px;
+    height: 100%;
+    width: 100%;
+}
+
+#b-snack:hover, #b-snack.open {
+  transform: translateY(calc(-100% + 1px));
+}
+
+#b-snack:hover + div + #menuFloat {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#b-snack #b-scrollable::-webkit-scrollbar {
+  background: rgba(0, 0, 0, 0.6);
+  width: 5px;
+}
+
+#b-snack #b-scrollable::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#b-snack #b-scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#logBar {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    min-height: 100%;
+    width: 100%;
+}
+
+#logBar {
+    color: #d1d0d0;
+    font-size: 12px;
+    word-wrap: break-word;
+    font-family: monospace;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#logBar li {
+    padding: 2px 5px;
+}
+
+#logBar li > strong {
+    color: #e91e63;
 }
