@@ -1,5 +1,5 @@
 const path = require('path')
-
+//sdf df
 const config = {}
 
 config.indexImage = {

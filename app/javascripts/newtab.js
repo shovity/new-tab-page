@@ -186,6 +186,10 @@ const createNoteHtmlElement = (id, msg, x, y, w, h) => {
         </div>
         <div class="rain-bow"><div></div><div></div><div></div></div>
         <textarea
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
           placeholder="new note"
           editor-noteid="${id}"
           style="width:${w}px;height:${h-20}px;">${msg}</textarea>
