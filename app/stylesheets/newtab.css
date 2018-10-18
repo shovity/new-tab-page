@@ -291,12 +291,9 @@ body {
   border-radius: 7px;
   text-align: center;
   line-height: 14px;
-}
-
-#noteBox .note-remove::before {
   color: #fff;
-  font-family: IndieFlower;
-  content: "X";
+  font-size: 18px;
+  line-height: 16px;
 }
 
 .rain-bow {

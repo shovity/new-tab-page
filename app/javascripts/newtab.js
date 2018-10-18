@@ -182,7 +182,7 @@ const createNoteHtmlElement = (id, msg, x, y, w, h) => {
     <div id="noteid-${id}" class="note" style="transform: translate(${x}px, ${y}px)">
       <div class="box">
         <div class="note-controls" move-noteid="${id}">
-          <div class="note-remove" remove-noteid="${id}"></div>
+          <div class="note-remove" remove-noteid="${id}">&times;</div>
         </div>
         <div class="rain-bow"><div></div><div></div><div></div></div>
         <textarea
