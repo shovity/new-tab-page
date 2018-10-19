@@ -116,7 +116,7 @@ bookmark.createParent = (node) => {
  * @param  {Object}  node
  * @param  {Boolean} [clear=false] clean bookmark bar before render
  */
-bookmark.render = (node, clear = false) => {
+bookmark.render = (node, clear=false) => {
   if (clear) bookmark.htmlBookmarkBar.innerHTML = ''
   bookmark.htmlBookmarkBar.innerHTML += bookmark.createParent(node)
 }
@@ -158,22 +158,17 @@ const pushState = () => {
 }
 
 const genUniqueNoteId = () => {
-  let id = 0
-  while (notes.find(note => note.id === id)) {
-    id++
-  }
-
-  return id
+  return Date.now()
 }
 
-const createNoteObject = (msg, x, y, w = 300, h = 100) => {
+const createNoteObject = (msg, x, y, w = 300, h = 100, node=0) => {
   // random position
   if (!x || !y) {
     x = Math.floor(Math.random() * (wW - 500))
     y = Math.floor(Math.random() * (wH - 250))
   }
 
-  return { msg, x, y, w, h}
+  return { msg, x, y, w, h, node}
 }
 
 const createNoteHtmlElement = (id, msg, x, y, w, h) => {
@@ -199,13 +194,13 @@ const createNoteHtmlElement = (id, msg, x, y, w, h) => {
 }
 
 const addNote = (note) => {
-  let { id, msg, x, y, w, h } = note
+  let { id, msg, x, y, w, h, node } = note
 
   // New note don't have a id
   // push it to state
   if (id === undefined) {
     const id = genUniqueNoteId()
-    notes.push({ id, msg, x, y, w, h })
+    notes.push({ id, msg, x, y, w, h, node })
   }
 
   // console.log(`add note ${id} = ${msg}`)
@@ -214,11 +209,15 @@ const addNote = (note) => {
   noteBox.innerHTML += createNoteHtmlElement(id, msg, x, y, w, h)
 }
 
-const renderNotes = (notes, clear = true) => {
+const renderNotes = (notes, clear=true, node=+localStorage.node) => {
+
   // clear before render
   if (clear) noteBox.innerHTML = ''
+
   // loop adding
-  notes.forEach(note => {
+  notes.filter(note => {
+    return node === undefined || node === note.node 
+  }).forEach(note => {
     addNote(note)
   })
 }
@@ -363,6 +362,21 @@ const checkAndReplaceCode = (target) => {
     pushState()
     renderNotes(notes)
   })
+
+  // listen switch node
+  window.btnSwitchNode.addEventListener('click', () => {
+    currentNode = +localStorage.node
+    if (currentNode > 2) {
+      currentNode = 0
+    } else {
+      currentNode++
+    }
+
+    window.btnSwitchNode.innerHTML = currentNode
+
+    localStorage.node = currentNode
+    renderNotes(window.notes)
+  })
 }
 
 {
@@ -478,6 +492,9 @@ port.onMessage.addListener(({ request, data, err }) => {
       console.log('Revice response not match')
   }
 })
+
+// render value btn node
+window.btnSwitchNode.innerHTML = localStorage.node
 
 // request note to background scripts .,-+)
 port.postMessage({ request: ARE_YOU_READY })
