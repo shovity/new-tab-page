@@ -161,7 +161,7 @@ const genUniqueNoteId = () => {
   return Date.now()
 }
 
-const createNoteObject = (msg, x, y, w = 300, h = 100, node=0) => {
+const createNoteObject = (msg, x, y, w = 300, h = 100, node=localStorage.node) => {
   // random position
   if (!x || !y) {
     x = Math.floor(Math.random() * (wW - 500))
@@ -216,7 +216,9 @@ const renderNotes = (notes, clear=true, node=+localStorage.node) => {
 
   // loop adding
   notes.filter(note => {
-    return node === undefined || node === note.node 
+    console.log(node, note.node);
+    
+    return node === undefined || node === +note.node 
   }).forEach(note => {
     addNote(note)
   })
