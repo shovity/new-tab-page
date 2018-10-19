@@ -501,28 +501,3 @@ body {
 #b-snack #b-scrollable::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.6);
 }
-
-#logBar {
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.6);
-    min-height: 100%;
-    width: 100%;
-}
-
-#logBar {
-    color: #d1d0d0;
-    font-size: 12px;
-    word-wrap: break-word;
-    font-family: monospace;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-#logBar li {
-    padding: 2px 5px;
-}
-
-#logBar li > strong {
-    color: #e91e63;
-}

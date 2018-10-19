@@ -479,35 +479,6 @@ port.onMessage.addListener(({ request, data, err }) => {
   }
 })
 
-/**
- * Scoket connect port 1404
- * For good performance, init connect affter 300ms
- */
-
-setTimeout(() => {
-
-  // disable log stream
-  return
-
-  const socket = io('http://127.0.0.1:1404')
-
-  socket.on('connect', () => {
-      console.log('client has connected to server 1404');
-  })
-
-  socket.on('log', (log) => {
-      lines = log.split('\n')
-      let feed = ''
-
-      lines.forEach(line => {
-          if (line.trim() === '') return
-          feed += `<li><strong>${new Date().toLocaleTimeString()}: </strong>${line}</li>`
-      })
-      logBar.innerHTML += feed
-      window['b-scrollable'].scroll({ top: window['b-scrollable'].scrollHeight, left: 0, behavior: 'smooth' })
-  })
-}, 300)
-
 // request note to background scripts .,-+)
 port.postMessage({ request: ARE_YOU_READY })
 if (requsetInterval === null && backgroundNotReady) requsetInterval = setInterval(() => {
