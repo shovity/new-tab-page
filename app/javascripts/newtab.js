@@ -382,6 +382,9 @@ const checkAndReplaceCode = (target) => {
 }
 
 {
+  let interval = null
+  let ctrlPress = false
+
   const addWave = (x, y) => {
 
     waveClickBox.innerHTML =
@@ -396,6 +399,23 @@ const checkAndReplaceCode = (target) => {
     const x = event.clientX
     const y = event.clientY
     addWave(x, y)
+    
+    if (ctrlPress) {
+      clearInterval(interval)
+      interval = setInterval(() => {
+        addWave(x, y)
+      }, 1900)
+    } else {
+      clearInterval(interval)
+    }
+  })
+
+  window.addEventListener('keydown', dEvent => {
+    ctrlPress = true
+  })
+
+  window.addEventListener('keyup', dEvent => {
+    ctrlPress = false
   })
 }
 
