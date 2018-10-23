@@ -23,6 +23,24 @@ body {
   z-index: -1;
 }
 
+#wallGhost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: .3;
+  width: 100vw;
+  height: 100vh;
+  background: url(../images/backgrounds/673189.png) no-repeat;
+  background-size: cover;
+  z-index: 0;
+  transform: translate(-50px);
+  opacity: 0;
+}
+
+.ghost {
+  animation: ghost 1s ease-in 0s infinite;
+}
+
 .icon {
   display: inline-block;
   background-size: 100% 100%;
@@ -453,6 +471,20 @@ body {
     opacity: .2;
     width: 150px;
     height: 150px;
+  }
+}
+
+@keyframes ghost {
+  0% {
+    transform: translateX(0);
+    opacity: .7;
+  }
+  20% {
+    opacity: .2;
+  }
+  100% {
+    transform: translateX(-50px);
+    opacity: 0;
   }
 }
 

@@ -40,6 +40,7 @@ if (!debug) console.log = () => 'debug disabled'
 if (wallpaperRandom) {
   const i = Math.floor(Math.random() * images.length)
   wall.style.backgroundImage = `url(${images[i]})`
+  wallGhost.style.backgroundImage = `url(${images[i]})`
 }
 
 /**
@@ -382,7 +383,8 @@ const checkAndReplaceCode = (target) => {
 }
 
 {
-  let interval = null
+  let waveInterval = null
+  let ghostTimeout = null
   let ctrlPress = false
 
   const addWave = (x, y) => {
@@ -401,17 +403,27 @@ const checkAndReplaceCode = (target) => {
     addWave(x, y)
     
     if (ctrlPress) {
-      clearInterval(interval)
+      clearInterval(waveInterval)
       interval = setInterval(() => {
         addWave(x, y)
       }, 1900)
     } else {
-      clearInterval(interval)
+      clearInterval(waveInterval)
     }
   })
 
   window.addEventListener('keydown', dEvent => {
-    ctrlPress = true
+    if (dEvent.keyCode === 13) {
+      ctrlPress = true
+    }
+
+    if (dEvent.keyCode === 32 && !ghostTimeout) {
+      wallGhost.className = 'ghost'
+      ghostTimeout = setTimeout(() => {
+        wallGhost.className = ''
+        ghostTimeout = null
+      }, 1000)
+    }
   })
 
   window.addEventListener('keyup', dEvent => {
