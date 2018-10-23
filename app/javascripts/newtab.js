@@ -422,7 +422,7 @@ const checkAndReplaceCode = (target) => {
       ghostTimeout = setTimeout(() => {
         wallGhost.className = ''
         ghostTimeout = null
-      }, 1000)
+      }, 700)
     }
   })
 
