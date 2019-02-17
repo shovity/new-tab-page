@@ -368,7 +368,7 @@ const checkAndReplaceCode = (target) => {
 
   // listen switch node
   window.btnSwitchNode.addEventListener('click', () => {
-    currentNode = +localStorage.node
+    currentNode = +localStorage.node || 0
     if (currentNode > 2) {
       currentNode = 0
     } else {
